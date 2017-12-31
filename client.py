@@ -33,12 +33,14 @@ class Client():
         data = self.mem[0:length]
         print hexdump(data, start=addr)
 
+        return self.c(F.memset, addr, val, size)
     def w(self, addr, data):
         rop = Rop()
         src = rop.awrite(data)
         rop.call(F.memcpy, addr, src, len(data))
         self.execute(rop)
 
+        return self.c(F.malloc, size)
         """ Ok this is done in a kinda roundabout way but whatever """
         rop = Rop()
         rop.write64(data_base, data_base + 0)
@@ -68,6 +70,7 @@ class Client():
 
                 fout.write(data)
 
+            print '[%s] 0x%010x-0x%010x size=0x%010x [%s] %s' % (perm_str, base, base+size-1, size, type_map[state], attr_str)
 
         cur = 0
         while cur < 2 ** 64:
@@ -87,6 +90,29 @@ class Client():
             fout.write(self.mem[0:ret])
         self.fh.fclose(fin)
         fout.close()
+
+    def write_file(self, dst, src):
+        """ Upload file `dst` to switch from `src` """
+        fin = open(src, "rb")
+        fout = self.fh.fopen(dst, "wb")
+        if not fout:
+            print "failed to open '{}' for write".format(dst)
+            return
+        print 'fopen success'
+        while True:
+            filedata = fin.read(0x1000)
+            if len(filedata) == 0:
+                break
+            self.w_big(mem+0x2000, filedata)
+            ret = self.fh.fwrite(mem+0x2000, 1, len(filedata), fout)
+            if ret == 0:
+                print "File write failed."
+                break
+            if ret < len(filedata):
+                print "Only 0x%x of 0x%x bytes were written, aborting." % (ret, len(filedata))
+                break
+        self.fh.fclose(fout)
+        fin.close()
 
     def list_dir(self, path, recursive=False, dump_files=False, host_path="", prefix=""):
         if dump_files:
@@ -115,5 +141,115 @@ class Client():
     def dump_dir(self, src_path, dst_path, recursive=True):
         self.list_dir(src_path, recursive, True, dst_path)
 
+        return self.c(F.svcSetHeapSize, out, size)
+        return self.c(F.svcCloseHandle, handle)
+        return self.c(F.svcClearEvent, handle)
+    def svcMirrorStack(self, dst, src, size):
+        return self.c(F.svcMirrorStack, dst, src, size)
+    def svcUnmirrorStack(self, dst, src, size):
+        return self.c(F.svcUnmirrorStack, dst, src, size)
+        return self.c(F.svcProtectMemory, addr, size, perm)
+        return self.c(F.svcCreateMemoryMirror, handle_out, addr, size, perm)
+        return self.c(F.svcCreateMemoryBlock, handle_out, size, perm0, perm1)
+        return self.c(F.svcMapMemoryMirror, handle, addr, size, perm)
+        return self.c(F.svcUnmapMemoryMirror, handle, addr, size)
+    def svcSendSyncRequestByBuf(self, cmdbuf, cmdsz, handle):
+        return self.c(F.svcSendSyncRequestByBuf, cmdbuf, cmdsz, handle)
+    def svcGetInfo(self, out, id0, handle, id1):
+        return self.c(F.svcGetInfo, out, id0, handle, id1)
+        return self.c(F.svcGetThreadId, out, handle)
+        return self.c(F.svcSendSyncRequest, handle)
+        return self.c(F.svcMapMemoryBlock, handle, addr, size, perm)
+        return self.c(F.svc3, addr, end_addr, state0, state1)
+        return self.c(F.svc19, h)
+        return self.c(F.svc11, handle)
+        return self.c(F.svc1D, ptr, value)
+        return self.c(F.svcConnectToPort, handle_out, ptr_str)
+        return self.c(F.svcCreateThread, handle_out, entry, arg, stack_top, thread_prio, processor_id)
+        return self.c(F.svcStartThread, handle)
+        return self.c(F.svcExitThread)
+    def cmd_pid_buf46(self, h, _id, buf, size,
+            a=0xFFFFFFFFFFFFFFFF, b=0xFFFFFFFFFFFFFFFF,
+            c=0xFFFFFFFFFFFFFFFF, d=0xFFFFFFFFFFFFFFFF,
+            e=0xFFFFFFFFFFFFFFFF):
+        cmd = IpcCmd(_id)
+        cmd.send_pid()
+        cmd.add_40_4_2(buf, size)
+        cmd.add_raw_64(a)
+        cmd.add_raw_64(b)
+        cmd.add_raw_64(c)
+        cmd.add_raw_64(d)
+        cmd.add_raw_64(e)
+        return cmd.execute(mem+0x1000, self, h)
+
+    def cmd_buf5_buf5_raw5(self, h, _id, buf, size, buf2, size2,
+            a=0xFFFFFFFFFFFFFFFF, b=0xFFFFFFFFFFFFFFFF,
+            c=0xFFFFFFFFFFFFFFFF, d=0xFFFFFFFFFFFFFFFF,
+            e=0xFFFFFFFFFFFFFFFF):
+        cmd = IpcCmd(_id)
+        cmd.add_4_1(buf, size)
+        cmd.add_4_1(buf2, size2)
+        cmd.add_raw_64(a)
+        cmd.add_raw_64(b)
+        cmd.add_raw_64(c)
+        cmd.add_raw_64(d)
+        cmd.add_raw_64(e)
+        return cmd.execute(mem+0x1000, self, h)
+
+    def cmd_buf5_buf6_raw5(self, h, _id, buf, size, buf2, size2,
+            a=0xFFFFFFFFFFFFFFFF, b=0xFFFFFFFFFFFFFFFF,
+            c=0xFFFFFFFFFFFFFFFF, d=0xFFFFFFFFFFFFFFFF,
+            e=0xFFFFFFFFFFFFFFFF):
+        cmd = IpcCmd(_id)
+        cmd.add_4_1(buf, size)
+        cmd.add_4_2(buf2, size2)
+        cmd.add_raw_64(a)
+        cmd.add_raw_64(b)
+        cmd.add_raw_64(c)
+        cmd.add_raw_64(d)
+        cmd.add_raw_64(e)
+        return cmd.execute(mem+0x1000, self, h)
+
+    def cmd_bufa_buf9_raw5(self, h, _id, buf, size, buf2, size2,
+            a=0xFFFFFFFFFFFFFFFF, b=0xFFFFFFFFFFFFFFFF,
+            c=0xFFFFFFFFFFFFFFFF, d=0xFFFFFFFFFFFFFFFF,
+            e=0xFFFFFFFFFFFFFFFF):
+        cmd = IpcCmd(_id)
+        cmd.add_raw_64(a)
+        cmd.add_raw_64(b)
+        cmd.add_raw_64(c)
+        cmd.add_raw_64(d)
+        cmd.add_raw_64(e)
+        cmd.add_8_1(buf2, size2)
+        cmd.add_8_2(buf, size)
+        return cmd.execute(mem+0x1000, self, h)
+
+            a=0xFFFFFFFFFFFFFFFF, b=0xFFFFFFFFFFFFFFFF,
+            c=0xFFFFFFFFFFFFFFFF, d=0xFFFFFFFFFFFFFFFF,
+            e=0xFFFFFFFFFFFFFFFF):
+        cmd = IpcCmd(_id)
+        cmd.add_raw_64(a)
+        cmd.add_raw_64(b)
+        cmd.add_raw_64(c)
+        cmd.add_raw_64(d)
+        cmd.add_8_2(buf, size)
+        cmd.add_8_1(buf2, size2)
+        return cmd.execute(mem+0x1000, self, h)
+
+    def cmd_bufa_raw5(self, h, _id, buf, size, 
+            a=0xFFFFFFFFFFFFFFFF, b=0xFFFFFFFFFFFFFFFF,
+            c=0xFFFFFFFFFFFFFFFF, d=0xFFFFFFFFFFFFFFFF,
+            e=0xFFFFFFFFFFFFFFFF):
+        cmd = IpcCmd(_id)
+        cmd.add_raw_64(a)
+        cmd.add_raw_64(b)
+        #cmd.add_raw_64(c)
+        #cmd.add_raw_64(d)
+        #cmd.add_raw_64(e)
+        cmd.add_8_2(buf, size)
+        return cmd.execute(mem+0x1000, self, h)
+
+            c=0xFFFFFFFFFFFFFFFF, d=0xFFFFFFFFFFFFFFFF):
+        cmd.add_raw_64(d)
 if __name__ == "__main__":
     main = bin + 0x6000
