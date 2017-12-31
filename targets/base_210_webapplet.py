@@ -102,3 +102,5 @@ class Dataptrs210Webapplet:
     mm_objptr = main_base+0x95c568
     nif_objptr = main_base+0x91e220
     nv_objptr = main_base+0x8f4b68
+
+    webapplet_titleid = 0x010000000000100A

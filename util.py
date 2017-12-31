@@ -13,6 +13,7 @@ def u64(b, off=0):
 def p16(x):
 	""" Pack 16-bit """
 	return struct.pack("<H", x)
+
 def c_str(b, off=0):
 	b = b[off:]
 	out = ""
@@ -22,6 +23,8 @@ def c_str(b, off=0):
 		x += 1
 	return out
 
+def isint(x):
+    return type(x) is int or type(x) is long
 
 def hexdump( src, length=16, sep='.', start=0 ):
 	'''

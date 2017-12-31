@@ -18,6 +18,7 @@ class FunctionHelper:
             return self.call(name, *args, **kwargs)
         return f
 
+    def call(self, func, *args, **kwargs):
         if type(func) in [str, unicode]:
             if func in self.funcs:
                 func = self.funcs[func]

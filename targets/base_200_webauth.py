@@ -105,3 +105,5 @@ class Dataptrs200Webauth:
     nif_objptr = main_base+0x91d220
     nv_objptr = main_base+0x8f3b68
     vi_objptr = main_base+0x8B04D8
+
+    webapplet_titleid = 0x010000000000100A

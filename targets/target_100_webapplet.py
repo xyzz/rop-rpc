@@ -155,6 +155,9 @@ class Rop(BaseRop):
         ]
 
     def infloop(self):
+        self.rop += [
+            # todo
+        ]
 
     def jmp(self, new_stack):
         raise NotImplementedError

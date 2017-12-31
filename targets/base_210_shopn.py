@@ -102,3 +102,6 @@ class Dataptrs210Shopn:
     mm_objptr = main_base+0x95c668
     nif_objptr = main_base+0x91e320
     nv_objptr = main_base+0x8f4be8
+
+    webapplet_titleid = 0x010000000000100B
+
