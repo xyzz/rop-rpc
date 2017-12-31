@@ -1,0 +1,4 @@
+# target = "100_webapplet"
+target = "200_webauth"
+# target = "210_shopn"
+# target = "210_webapplet"
