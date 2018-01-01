@@ -20,9 +20,9 @@ class Functions100Webapplet:
 
     svcQueryMemory = main_base + 0x3dab2c
     svcCloseHandle = main_base + 0x3dabfc
+    svcConnectToNamedPort = main_base + 0x3dac4c
     svcSendSyncRequest = main_base + 0x3dac64
-    svcConnectToPort = main_base + 0x3dac4c
-    svcSendSyncRequestByBuf = main_base+0x3dac6c
+    svcSendSyncRequestWithUserBuffer = main_base+0x3dac6c
 
     srv_GetServiceHandle = main_base + 0x3c60c4
 

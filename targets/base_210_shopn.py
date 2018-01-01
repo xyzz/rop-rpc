@@ -26,33 +26,34 @@ class Functions210Shopn:
 
     memset = main_base+0x4411c0
 
+    svcSetHeapSize = main_base+0x3c2dcc
+    svcSetMemoryPermission = main_base+0x3c2de4
+    svcSetMemoryAttribute = main_base+0x3c2dec
+    svcMapMemory = main_base+0x3c2df4
+    svcUnmapMemory = main_base+0x3c2dfc
+
     svcQueryMemory = main_base + 0x3c2e04
 
-    svcSetHeapSize = main_base+0x3c2dcc
-    svcCloseHandle = main_base+0x3c2edc
-    svcClearEvent = main_base+0x3c2ee4
-    svcMirrorStack = main_base+0x3c2df4
-    svcUnmirrorStack = main_base+0x3c2dfc
-    svcProtectMemory = main_base+0x3c2de4
-    svcCreateMemoryMirror = main_base+0x3c2ec4
-    svcCreateMemoryBlock = main_base+0x3c2f9c
-    svcMapMemoryMirror = main_base+0x3c2fb4
-    svcUnmapMemoryMirror = main_base+0x3c2fbc
-    svcSendSyncRequestByBuf = main_base+0x3c2f4c
-    svcGetInfo = main_base+0x3c2f84
-    svcGetThreadId = main_base+0x3c2f54
-    svcSendSyncRequest = main_base+0x3c2f44
-    svcMapMemoryBlock = main_base+0x3c2eb4
-    svc3 = main_base+0x3c2dec
-    svc19 = main_base+0x3c2f04
-    svc11 = main_base+0x3c2ea4
-    svc1D = main_base+0x3c2f24
-    svcConnectToPort = main_base+0x3c2f2c
     svcCreateThread = main_base+0x3c2e24
     svcStartThread = main_base+0x3c2e3c
     svcExitThread = main_base+0x3c2e44
-    svcWaitEvents = main_base+0x3c2eec
     svcGetCurrentProcessorNumber = main_base+0x3c2e9c
+    svcSignalEvent = main_base+0x3c2ea4
+    svcMapSharedMemory = main_base+0x3c2eb4
+    svcCreateTransferMemory = main_base+0x3c2ec4
+    svcCloseHandle = main_base+0x3c2edc
+    svcResetSignal = main_base+0x3c2ee4
+    svcWaitSynchronization = main_base+0x3c2eec
+    svcCancelSynchronization = main_base+0x3c2f04
+    svcSignalProcessWideKey = main_base+0x3c2f24
+    svcConnectToNamedPort = main_base+0x3c2f2c
+    svcSendSyncRequest = main_base+0x3c2f44
+    svcSendSyncRequestWithUserBuffer = main_base+0x3c2f4c
+    svcGetThreadId = main_base+0x3c2f54
+    svcGetInfo = main_base+0x3c2f84
+    svcCreateSharedMemory = main_base+0x3c2f9c
+    svcMapTransferMemory = main_base+0x3c2fb4
+    svcUnmapTransferMemory = main_base+0x3c2fbc
 
     OpenDirectory = main_base + 0x2349B8 + 0x6000
     ReadDirectory = main_base + 0x2339D8 + 0x6000
