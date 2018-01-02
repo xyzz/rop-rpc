@@ -158,7 +158,7 @@ class Client():
 
                 fout.write(data)
 
-    def query(self, addr):
+    def query(self, addr, detail=False):
         regs = self.fh.svcQueryMemory(data_base, data_base + 0x100, addr, regs=True)
         base =  u64(self.mem, 0)
         size =  u64(self.mem, 8)
@@ -215,15 +215,26 @@ class Client():
             if pageinfo != 0:
                 print '  Info:   0x%x' % pageinfo
 
-        return base + size
+        if not detail:
+            return base + size
+
+        return [base + size, (perm_str, base, size, type_map[state], attr_str)]
 
     def q(self, addr):
         return self.query(addr)
 
-    def maps(self, dump=False):
+    def maps(self, dump=False, host_path=""):
         cur = 0
         while cur < 2 ** 64:
-            cur = self.query(cur)
+            cur, info = self.query(cur, detail=True)
+            if not dump:
+                continue
+            perm, base, size, ty, attr = info
+            if perm[0] != 'R':
+                continue
+            fn_fmt = "0x{base:016X}-0x{end:016X}_{perm}_{type}.bin"
+            filename = fn_fmt.format(base=base, end=base+size-1, perm=perm, type=ty)
+            self._dump_region(base, size, os.path.join(host_path, filename))
 
     def space(self):
         maps = []
@@ -248,8 +259,8 @@ class Client():
 
         return maps
 
-    def dump_all(self):
-        self.maps(True)
+    def dump_all(self, host_path):
+        self.maps(True, host_path)
 
     def dump_file(self, src, dst):
         """ Download file `src` from switch to `dst` """
