@@ -1,3 +1,4 @@
+from __future__ import print_function
 import struct
 
 class IpcCmd:
@@ -137,7 +138,7 @@ class IpcCmd:
 
         cmd = c.r(cmdbuf, size)
 
-        print '__ Raw: _____'
+        print('__ Raw: _____')
         c.x(cmdbuf, size)
 
         self.pid = None
@@ -154,27 +155,27 @@ class IpcCmd:
             num_handles_move = (handle_desc >> 5) & 0xF
             num_handles = num_handles_copy+num_handles_move
 
-            print '__ Handles: ___'
+            print('__ Handles: ___')
             for i in range(start, num_handles_copy + start):
                 handle = c.r32(cmdbuf+12+i*4)
-                print '  [Copied] Handle 0x%x' % handle
+                print('  [Copied] Handle 0x%x' % handle)
                 self.recv_handles.append(handle)
             for i in range(num_handles_copy + start, num_handles + start):
                 handle = c.r32(cmdbuf+12+i*4)
-                print '  [Moved] Handle 0x%x' % handle
+                print('  [Moved] Handle 0x%x' % handle)
                 self.recv_handles.append(handle)
 
         pos = cmd.find('SFCO')
         ret = None
 
         if pos != -1:
-            print '__ Return ___'
+            print('__ Return ___')
             ret = cmd[pos+8 : pos+8+4]
             if len(ret) > 0:
                 ret = struct.unpack('<I', ret)[0]
-                print '0x%x' % ret
+                print('0x%x' % ret)
             else:
-                print '(void)'
+                print('(void)')
         self.recv_ret = ret
 
         self.recv_raw = cmd[pos:]

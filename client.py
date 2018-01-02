@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 
+from __future__ import print_function
 import random
 import socket
 import pickle
@@ -43,7 +44,7 @@ class Client():
     def x(self, addr, length=0x100):
         self.fh.memcpy(data_base, addr, length)
         data = self.mem[0:length]
-        print hexdump(data, start=addr)
+        print(hexdump(data, start=addr))
 
     def r(self, addr, length=1):
         self.fh.memcpy(data_base, addr, length)
@@ -128,9 +129,9 @@ class Client():
         data = self.execute(rop)
         buf_base = u64(data, 0) - 0x10000
 
-        print "Static memory: 0x{:x} (You can use it between different calls)".format(buf_base)
-        print "Main binary base: 0x{:x}".format(u64(data, 8))
-        print "Webkit base: 0x{:x}".format(u64(data, 0x10))
+        print("Static memory: 0x{:x} (You can use it between different calls)".format(buf_base))
+        print("Main binary base: 0x{:x}".format(u64(data, 8)))
+        print("Webkit base: 0x{:x}".format(u64(data, 0x10)))
 
     def get_bases(self):
         rop = Rop()
@@ -154,7 +155,7 @@ class Client():
                 base += chunk
                 sent += chunk
 
-                print "{:.2f}%".format(100.0 * sent / whole)
+                print("{:.2f}%".format(100.0 * sent / whole))
 
                 fout.write(data)
 
@@ -205,15 +206,15 @@ class Client():
             attr_str += 'UNCACHED '
 
         if state != 0:
-            print '[%s] 0x%010x-0x%010x size=0x%010x [%s] %s' % (perm_str, base, base+size-1, size, type_map[state], attr_str)
+            print('[%s] 0x%010x-0x%010x size=0x%010x [%s] %s' % (perm_str, base, base+size-1, size, type_map[state], attr_str))
             if unk1 != 0:
-                print '  !!Unk1!!:   0x%x' % unk1
+                print('  !!Unk1!!:   0x%x' % unk1)
             if unk2 != 0:
-                print '  Unk2:   0x%x' % unk2
+                print('  Unk2:   0x%x' % unk2)
             if unk3 != 0:
-                print '  !!Unk3!!:   0x%x' % unk3
+                print('  !!Unk3!!:   0x%x' % unk3)
             if pageinfo != 0:
-                print '  Info:   0x%x' % pageinfo
+                print('  Info:   0x%x' % pageinfo)
 
         if not detail:
             return base + size
@@ -266,9 +267,9 @@ class Client():
         """ Download file `src` from switch to `dst` """
         fin = self.fh.fopen(src, "rb")
         if not fin:
-            print "failed to open '{}' for dump".format(src)
+            print("failed to open '{}' for dump".format(src))
             return
-        print 'fopen success'
+        print('fopen success')
         fout = open(dst, "wb")
         while True:
             ret = self.fh.fread(data_base, 1, RPC_RESPONSE_LEN - RPC_SCRATCH_SIZE, fin)
@@ -283,9 +284,9 @@ class Client():
         fin = open(src, "rb")
         fout = self.fh.fopen(dst, "wb")
         if not fout:
-            print "failed to open '{}' for write".format(dst)
+            print("failed to open '{}' for write".format(dst))
             return
-        print 'fopen success'
+        print('fopen success')
         while True:
             filedata = fin.read(0x1000)
             if len(filedata) == 0:
@@ -293,10 +294,10 @@ class Client():
             self.w_big(mem+0x2000, filedata)
             ret = self.fh.fwrite(mem+0x2000, 1, len(filedata), fout)
             if ret == 0:
-                print "File write failed."
+                print("File write failed.")
                 break
             if ret < len(filedata):
-                print "Only 0x%x of 0x%x bytes were written, aborting." % (ret, len(filedata))
+                print("Only 0x%x of 0x%x bytes were written, aborting." % (ret, len(filedata)))
                 break
         self.fh.fclose(fout)
         fin.close()
@@ -306,7 +307,7 @@ class Client():
             os.mkdir(host_path)
         ret = self.fh.OpenDirectory(data_base, path, 3)
         if ret != 0:
-            print "failed to open '{0}', error={1}=0x{1:x}".format(path, ret)
+            print("failed to open '{0}', error={1}=0x{1:x}".format(path, ret))
             return
         handle = u64(self.mem, 0)
         while True:
@@ -318,7 +319,7 @@ class Client():
             entry = self.mem[0x200:0x200 + 0x310]
             is_file = u32(entry, 0x304) & 1
             name = c_str(entry, 0)
-            print "{}{}{}".format(prefix, name, "/" if not is_file else "")
+            print("{}{}{}".format(prefix, name, "/" if not is_file else ""))
             fullpath = "{}/{}".format(path, name)
             if dump_files and is_file:
                 self.dump_file(fullpath, os.path.join(host_path, name))
@@ -464,21 +465,21 @@ class Client():
 
         self.w(mem+8, 'sm:\0')
         if self.svcConnectToNamedPort(mem, mem+8) != 0:
-            print '[-] svcConnectToNamedPort failed'
+            print('[-] svcConnectToNamedPort failed')
             return
         srv_handle = c.r32(mem)
-        print '[+] Handle', srv_handle
+        print('[+] Handle', srv_handle)
         self.w32(self.r64(D.srv_objptr)+12, srv_handle)
-        print '[+] OK'
+        print('[+] OK')
 
     def srv_bruteforce(self, start=''):
         def test(fout, a,b='\0',c='\0',d='\0',e='\0',f='\0',g='\0',h='\0'):
             name_s = (a+b+c+d+e+f+g+h)
-            print 'testing %s' % name_s
+            print('testing %s' % name_s)
             name = ord(a) | ord(b)<<8 | ord(c)<<16 | ord(d)<<24 | ord(e)<<32 | ord(f)<<40 | ord(g)<<48 | ord(h)<<56
             ret = self.srv_cmd3(name)
             if ret != 3605:
-                print ret, name_s
+                print(ret, name_s)
                 fout.write("%s\n" % (name_s))
                 fout.flush()
 
@@ -505,7 +506,7 @@ class Client():
         ret = c.srv_cmd3(int(name[::-1].encode('hex'), 16))
         if ret == 3605:
             return '[*] NOT FOUND'
-        print ret
+        print(ret)
         return '[*] !!! FOUND !!! :D'
 
     def cmd(self, h, _id,
@@ -751,8 +752,8 @@ class Client():
 
 if __name__ == "__main__":
     import code
-    print '== Switch RPC Client =='
-    print ''
+    print('== Switch RPC Client ==')
+    print('')
     c = Client()
     __bases = c.get_bases()
     mem = __bases[0]

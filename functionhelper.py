@@ -4,6 +4,11 @@ from rop import F, G, Rop, data_base
 from rpc import RPC_RESPONSE_LEN
 from util import u64
 
+try:
+    unicode        # Python 2
+except NameError:
+    unicode = str  # Python 3
+
 class FunctionHelper:
 
     def __init__(self, ch):
@@ -19,7 +24,7 @@ class FunctionHelper:
         return f
 
     def call(self, func, *args, **kwargs):
-        if type(func) in [str, unicode]:
+        if isinstance(func, (str, unicode)):
             if func in self.funcs:
                 func = self.funcs[func]
             else:
