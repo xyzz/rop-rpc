@@ -27,33 +27,34 @@ class Functions200Webauth:
 
     memset = main_base+0x440200
 
+    svcSetHeapSize = main_base+0x3c1e10
+    svcSetMemoryPermission = main_base+0x3c1e28
+    svcSetMemoryAttribute = main_base+0x3c1e30
+    svcMapMemory = main_base+0x3c1e38
+    svcUnmapMemory = main_base+0x3c1e40
+
     svcQueryMemory = main_base + 0x3c1e48
 
-    svcSetHeapSize = main_base+0x3c1e10
-    svcCloseHandle = main_base+0x3c1f20
-    svcClearEvent = main_base+0x3c1f28
-    svcMirrorStack = main_base+0x3c1e38
-    svcUnmirrorStack = main_base+0x3c1e40
-    svcProtectMemory = main_base+0x3c1e28
-    svcCreateMemoryMirror = main_base+0x3c1f08
-    svcCreateMemoryBlock = main_base+0x3c1fe0
-    svcMapMemoryMirror = main_base+0x3c1ff8
-    svcUnmapMemoryMirror = main_base+0x3c2000
-    svcSendSyncRequestByBuf = main_base+0x3c1f90
-    svcGetInfo = main_base+0x3c1fc8
-    svcGetThreadId = main_base+0x3c1f98
-    svcSendSyncRequest = main_base+0x3c1f88
-    svcMapMemoryBlock = main_base+0x3c1ef8
-    svc3 = main_base+0x3c1e30
-    svc19 = main_base+0x3c1f48
-    svc11 = main_base+0x3c1ee8
-    svc1D = main_base+0x3c1f68
-    svcConnectToPort = main_base+0x3c1f70
     svcCreateThread = main_base+0x3c1e68
     svcStartThread = main_base+0x3c1e80
     svcExitThread = main_base+0x3c1e88
-    svcWaitEvents = main_base+0x3c1f30
     svcGetCurrentProcessorNumber = main_base+0x3c1ee0
+    svcSignalEvent = main_base+0x3c1ee8
+    svcMapSharedMemory = main_base+0x3c1ef8
+    svcCreateTransferMemory = main_base+0x3c1f08
+    svcCloseHandle = main_base+0x3c1f20
+    svcResetSignal = main_base+0x3c1f28
+    svcWaitSynchronization = main_base+0x3c1f30
+    svcCancelSynchronization = main_base+0x3c1f48
+    svcSignalProcessWideKey = main_base+0x3c1f68
+    svcConnectToNamedPort = main_base+0x3c1f70
+    svcSendSyncRequest = main_base+0x3c1f88
+    svcSendSyncRequestWithUserBuffer = main_base+0x3c1f90
+    svcGetThreadId = main_base+0x3c1f98
+    svcGetInfo = main_base+0x3c1fc8
+    svcCreateSharedMemory = main_base+0x3c1fe0
+    svcMapTransferMemory = main_base+0x3c1ff8
+    svcUnmapTransferMemory = main_base+0x3c2000
 
     # from https://github.com/reswitched/PegaSwitch/blob/master/exploit/sploitcore.js
     OpenDirectory = main_base + 0x233894 + 0x6000  # int OpenDirectory(_QWORD *handle, char *path, unsigned int flags)

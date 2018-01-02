@@ -184,7 +184,7 @@ class IpcCmd:
         #self._dump_response(c, cmdbuf)
         #c.x(cmdbuf, 0x100)
 
-        rc = c.svcSendSyncRequestByBuf(cmdbuf, 0x1000, h)
+        rc = c.svcSendSyncRequestWithUserBuffer(cmdbuf, 0x1000, h)
         if rc != 0:
             c.svcCloseHandle(h)
             raise Exception("Failed: %x" % rc)

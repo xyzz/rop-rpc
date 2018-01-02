@@ -318,56 +318,102 @@ class Client():
     def dump_dir(self, src_path, dst_path, recursive=True):
         self.list_dir(src_path, recursive, True, dst_path)
 
+    # 0x01
     def svcSetHeapSize(self, out, size):
         return self.c(F.svcSetHeapSize, out, size)
-    def svcCloseHandle(self, handle):
-        return self.c(F.svcCloseHandle, handle)
-    def svcClearEvent(self, handle):
-        return self.c(F.svcClearEvent, handle)
-    def svcMirrorStack(self, dst, src, size):
-        return self.c(F.svcMirrorStack, dst, src, size)
-    def svcUnmirrorStack(self, dst, src, size):
-        return self.c(F.svcUnmirrorStack, dst, src, size)
-    def svcProtectMemory(self, addr, size, perm):
-        return self.c(F.svcProtectMemory, addr, size, perm)
-    def svcCreateMemoryMirror(self, handle_out, addr, size, perm):
-        return self.c(F.svcCreateMemoryMirror, handle_out, addr, size, perm)
-    def svcCreateMemoryBlock(self, handle_out, size, perm0, perm1):
-        return self.c(F.svcCreateMemoryBlock, handle_out, size, perm0, perm1)
-    def svcMapMemoryMirror(self, handle, addr, size, perm):
-        return self.c(F.svcMapMemoryMirror, handle, addr, size, perm)
-    def svcUnmapMemoryMirror(self, handle, addr, size):
-        return self.c(F.svcUnmapMemoryMirror, handle, addr, size)
-    def svcSendSyncRequestByBuf(self, cmdbuf, cmdsz, handle):
-        return self.c(F.svcSendSyncRequestByBuf, cmdbuf, cmdsz, handle)
-    def svcGetInfo(self, out, id0, handle, id1):
-        return self.c(F.svcGetInfo, out, id0, handle, id1)
-    def svcGetThreadId(self, out, handle):
-        return self.c(F.svcGetThreadId, out, handle)
-    def svcSendSyncRequest(self, handle):
-        return self.c(F.svcSendSyncRequest, handle)
-    def svcMapMemoryBlock(self, handle, addr, size, perm):
-        return self.c(F.svcMapMemoryBlock, handle, addr, size, perm)
-    def svc3(self, addr, end_addr, state0, state1):
-        return self.c(F.svc3, addr, end_addr, state0, state1)
-    def svc19(self, handle):
-        return self.c(F.svc19, h)
-    def svc11(self, handle):
-        return self.c(F.svc11, handle)
-    def svc1D(self, ptr, value):
-        return self.c(F.svc1D, ptr, value)
-    def svcConnectToPort(self, handle_out, ptr_str):
-        return self.c(F.svcConnectToPort, handle_out, ptr_str)
+    # 0x02
+    def svcSetMemoryPermission(self, addr, size, perm):
+        return self.c(F.svcSetMemoryPermission, addr, size, perm)
+    # 0x03
+    # TODO: recheck second argument.
+    # http://switchbrew.org/index.php?title=SVC#svcSetMemoryAttribute
+    def svcSetMemoryAttribute(self, addr, end_addr, state0, state1):
+        return self.c(F.svcSetMemoryAttribute, addr, end_addr, state0, state1)
+    # 0x04
+    def svcMapMemory(self, dst, src, size):
+        return self.c(F.svcMapMemory, dst, src, size)
+    # 0x05
+    def svcUnmapMemory(self, dst, src, size):
+        return self.c(F.svcUnmapMemory, dst, src, size)
+    # 0x06
+    # ...
+    # 0x08
     def svcCreateThread(self, handle_out, entry, arg, stack_top, thread_prio, processor_id=0xFFFFFFFE):
         return self.c(F.svcCreateThread, handle_out, entry, arg, stack_top, thread_prio, processor_id)
+    # 0x09
     def svcStartThread(self, handle):
         return self.c(F.svcStartThread, handle)
+    # 0x0A
     def svcExitThread(self):
         return self.c(F.svcExitThread)
-    def svcWaitEvents(self, out_idx, handles_ptr, handles_num, timeout):
-        return self.c(F.svcWaitEvents, out_idx, handles_ptr, handles_num, timeout)
+    # 0x0B
+    # ...
+    # 0x10
     def svcGetCurrentProcessorNumber(self):
         return self.c(F.svcGetCurrentProcessorNumber)
+    # 0x11
+    def svcSignalEvent(self, handle):
+        return self.c(F.svcSignalEvent, handle)
+    # 0x12
+    # 0x13
+    def svcMapSharedMemory(self, handle, addr, size, perm):
+        return self.c(F.svcMapSharedMemory, handle, addr, size, perm)
+    # 0x14
+    # 0x15
+    def svcCreateTransferMemory(self, handle_out, addr, size, perm):
+        return self.c(F.svcCreateTransferMemory, handle_out, addr, size, perm)
+    # 0x16
+    def svcCloseHandle(self, handle):
+        return self.c(F.svcCloseHandle, handle)
+    # 0x17
+    def svcResetSignal(self, handle):
+        return self.c(F.svcResetSignal, handle)
+    # 0x18
+    def svcWaitSynchronization(self, out_idx, handles_ptr, handles_num, timeout):
+        return self.c(F.svcWaitSynchronization, out_idx, handles_ptr, handles_num, timeout)
+    # 0x19
+    def svcCancelSynchronization(self, handle):
+        return self.c(F.svcCancelSynchronization, h)
+    # 0x1A
+    # ...
+    # 0x1D
+    def svcSignalProcessWideKey(self, ptr, value):
+        return self.c(F.svcSignalProcessWideKey, ptr, value)
+    # 0x1E
+    # 0x1F
+    def svcConnectToNamedPort(self, handle_out, ptr_str):
+        return self.c(F.svcConnectToNamedPort, handle_out, ptr_str)
+    # 0x20
+    # 0x21
+    def svcSendSyncRequest(self, handle):
+        return self.c(F.svcSendSyncRequest, handle)
+    # 0x22
+    def svcSendSyncRequestWithUserBuffer(self, cmdbuf, cmdsz, handle):
+        return self.c(F.svcSendSyncRequestWithUserBuffer, cmdbuf, cmdsz, handle)
+    # 0x23
+    # ...
+    # 0x25
+    def svcGetThreadId(self, out, handle):
+        return self.c(F.svcGetThreadId, out, handle)
+    # 0x26
+    # ...
+    # 0x29
+    def svcGetInfo(self, out, id0, handle, id1):
+        return self.c(F.svcGetInfo, out, id0, handle, id1)
+    # 0x2A
+    # ...
+    # 0x50
+    def svcCreateSharedMemory(self, handle_out, size, perm0, perm1):
+        return self.c(F.svcCreateSharedMemory, handle_out, size, perm0, perm1)
+    # 0x51
+    def svcMapTransferMemory(self, handle, addr, size, perm):
+        return self.c(F.svcMapTransferMemory, handle, addr, size, perm)
+    # 0x52
+    def svcUnmapTransferMemory(self, handle, addr, size):
+        return self.c(F.svcUnmapTransferMemory, handle, addr, size)
+    # 0x53
+    # ...
+    # 0x7F
 
     def write_rop(self, rop_addr, rop):
         writer = Rop()
@@ -406,8 +452,8 @@ class Client():
         self.svcCloseHandle(old)
 
         self.w(mem+8, 'sm:\0')
-        if self.svcConnectToPort(mem, mem+8) != 0:
-            print '[-] svcConnectToPort failed'
+        if self.svcConnectToNamedPort(mem, mem+8) != 0:
+            print '[-] svcConnectToNamedPort failed'
             return
         srv_handle = c.r32(mem)
         print '[+] Handle', srv_handle
