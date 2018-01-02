@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+from __future__ import print_function
 import unittest
 import shutil
 import os
@@ -131,7 +132,7 @@ class Test(unittest.TestCase):
 
 def main():
 	if len(argv) != 3:
-		print "Usage: ./test.py main.bin wk.bin"
+		print("Usage: ./test.py main.bin wk.bin")
 		return -1
 
 	global g_main_bin

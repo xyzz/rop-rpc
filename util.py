@@ -1,5 +1,10 @@
 import struct
 
+try:
+    long        # Python 2
+except NameError:
+    long = int  # Python 3
+
 def u32(b, off=0):
 	return struct.unpack("<I", b[off:off+4])[0]
 
@@ -24,7 +29,7 @@ def c_str(b, off=0):
 	return out
 
 def isint(x):
-    return type(x) is int or type(x) is long
+    return isinstance(x, (int, long))
 
 def hexdump( src, length=16, sep='.', start=0 ):
 	'''
