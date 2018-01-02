@@ -1,3 +1,4 @@
+from __future__ import print_function
 import Queue as queue
 import socket
 
@@ -100,7 +101,7 @@ class Rpc:
         rop.call(F.send, self.sockfd, data_base, RPC_RESPONSE_LEN, 0)
 
         new_stack = self.buf + RPC_ROP_OFF + RPC_ROP_SIZE * self.cur_stack + RPC_ROP_LOCALS
-        print "Using stack: 0x{:x}".format(new_stack)
+        print("Using stack: 0x{:x}".format(new_stack))
         self.cur_stack = 1 - self.cur_stack
 
         # Get next payload
