@@ -15,7 +15,10 @@ class Gadgets200Webauth:
 
 
 class Functions200Webauth:
-    malloc = main_base+0x6338
+    malloc = main_base + 0x6338
+    calloc = main_base + 0x6244
+    realloc = main_base + 0x628c
+    free = main_base + 0x6210
 
     setjmp = main_base + 0x4396b0
     longjmp = main_base + 0x439620
@@ -25,7 +28,10 @@ class Functions200Webauth:
     send = main_base + 0x3b3824
     recv = main_base + 0x3b3820
 
+    strncpy = main_base + 0xa1364
+
     memset = main_base+0x440200
+    memmove = main_base + 0x44938c
 
     svcSetHeapSize = main_base+0x3c1e10
     svcSetMemoryPermission = main_base+0x3c1e28

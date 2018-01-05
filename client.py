@@ -114,6 +114,15 @@ class Client():
     def malloc(self, size):
         return self.c(F.malloc, size)
 
+    def calloc(self, num, size):
+        return self.c(F.calloc, num, size)
+
+    def realloc(self, ptr, size):
+        return self.c(F.realloc, ptr, size)
+
+    def free(self, ptr):
+        return self.c(F.free, ptr)
+
     def alloc_str(self, s):
         s += '\0'
         ptr = self.malloc(len(s))
