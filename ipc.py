@@ -179,6 +179,8 @@ class IpcCmd:
         self.recv_ret = ret
 
         self.recv_raw = cmd[pos:]
+        recv_data_len = 4 * (cmd1 & 0x3FF) - 0x10
+        self.recv_data = cmd[pos+16:pos+recv_data_len]
 
     def execute(self, cmdbuf, c, h, fast=False):
         c.w(cmdbuf, self._construct())
@@ -196,5 +198,6 @@ class IpcCmd:
                 "rc": self.recv_ret,
                 "handles": self.recv_handles,
                 "pid": self.pid,
-                "raw": self.recv_raw
+                "raw": self.recv_raw,
+                "data": self.recv_data,
             }
