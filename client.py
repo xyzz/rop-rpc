@@ -62,7 +62,7 @@ class Client():
 
     def r32(self, addr):
         return struct.unpack('<I', self.r(addr, 4))[0]
-        
+
     def r64(self, addr):
         return struct.unpack('<Q', self.r(addr, 8))[0]
 
@@ -705,7 +705,7 @@ class Client():
         cmd.add_8_1(buf2, size2)
         return cmd.execute(mem+0x1000, self, h)
 
-    def cmd_bufa_raw5(self, h, _id, buf, size, 
+    def cmd_bufa_raw5(self, h, _id, buf, size,
             a=0xFFFFFFFFFFFFFFFF, b=0xFFFFFFFFFFFFFFFF,
             c=0xFFFFFFFFFFFFFFFF, d=0xFFFFFFFFFFFFFFFF,
             e=0xFFFFFFFFFFFFFFFF):
