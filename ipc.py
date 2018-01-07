@@ -2,8 +2,9 @@ from __future__ import print_function
 import struct
 
 class IpcCmd:
-    def __init__(self, cmdid):
+    def __init__(self, cmdid, debug=False):
         self.cmdid = cmdid
+        self.debug = debug
         self.x = []
         self.a = []
         self.b = []
@@ -138,8 +139,8 @@ class IpcCmd:
 
         cmd = c.r(cmdbuf, size)
 
-        print('__ Raw: _____')
-        c.x(cmdbuf, size)
+        self._debug_print('__ Raw: _____')
+        c.x(cmdbuf, size, self._debug_print)
 
         self.pid = None
 
@@ -155,27 +156,27 @@ class IpcCmd:
             num_handles_move = (handle_desc >> 5) & 0xF
             num_handles = num_handles_copy+num_handles_move
 
-            print('__ Handles: ___')
+            self._debug_print('__ Handles: ___')
             for i in range(start, num_handles_copy + start):
                 handle = c.r32(cmdbuf+12+i*4)
-                print('  [Copied] Handle 0x%x' % handle)
+                self._debug_print('  [Copied] Handle 0x%x' % handle)
                 self.recv_handles.append(handle)
             for i in range(num_handles_copy + start, num_handles + start):
                 handle = c.r32(cmdbuf+12+i*4)
-                print('  [Moved] Handle 0x%x' % handle)
+                self._debug_print('  [Moved] Handle 0x%x' % handle)
                 self.recv_handles.append(handle)
 
         pos = cmd.find('SFCO')
         ret = None
 
         if pos != -1:
-            print('__ Return ___')
             ret = cmd[pos+8 : pos+8+4]
+            self._debug_print('__ Return ___')
             if len(ret) > 0:
                 ret = struct.unpack('<I', ret)[0]
-                print('0x%x' % ret)
+                self._debug_print('0x%x' % ret)
             else:
-                print('(void)')
+                self._debug_print('(void)')
         self.recv_ret = ret
 
         self.recv_raw = cmd[pos:]
@@ -201,3 +202,7 @@ class IpcCmd:
                 "raw": self.recv_raw,
                 "data": self.recv_data,
             }
+
+    def _debug_print(self, *args):
+        if self.debug:
+            print(*args)

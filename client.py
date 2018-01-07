@@ -41,10 +41,10 @@ class Client():
 
         return data
 
-    def x(self, addr, length=0x100):
+    def x(self, addr, length=0x100, print_fn=print):
         self.fh.memcpy(data_base, addr, length)
         data = self.mem[0:length]
-        print(hexdump(data, start=addr))
+        print_fn(hexdump(data, start=addr))
 
     def r(self, addr, length=1):
         self.fh.memcpy(data_base, addr, length)
