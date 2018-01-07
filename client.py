@@ -451,37 +451,6 @@ class Client():
         if n != 0:
             self.execute(writer)
 
-    def get_service(self, name):
-        ptr = self.malloc(8)
-        if ptr == 0:
-            print('[-] malloc failed')
-            return
-        ret = self.srv_cmd1(ptr, name)
-        if ret != 0:
-            print('[-] sm:GetService failed (0x%X)' % ret)
-            self.free(ptr)
-            return
-        handle = self.r32(ptr)
-        print('[+] Handle', handle)
-        self.free(ptr)
-        return handle
-
-    def setsys_get_mii_author_id(self):
-        handle = self.get_service('set:sys')
-        if not handle:
-            return
-        try:
-            out = self.cmd(handle, 90)
-        except Exception as e:
-            print('[-] set:sys:GetMiiAuthorId failed')
-            print('[-] ', e.message)
-            self.svcCloseHandle(handle)
-            return
-        ids = struct.unpack('>QQ', out['data'])
-        ret = (ids[0] << 64) | ids[1]
-        self.svcCloseHandle(handle)
-        return '%X' % ret
-
     ## Service playground
     def srv_cmd0(self, unk_zero):
         # srv::Initialize
