@@ -487,17 +487,6 @@ class Client():
         # srv::Initialize
         obj = self.r64(D.srv_objptr)
         return self.cv(obj, 0x20, unk_zero)
-    def srv_cmd1(self, handle_out, name):
-        # srv::GetService
-        return self.c(F.srv_GetServiceHandle, handle_out, name)
-    def srv_cmd2(self, handle_out, name_maybe, max_sessions_maybe, unk_bool):
-        # srv::RegisterService
-        obj = self.r64(D.srv_objptr)
-        return self.cv(obj, 0x30, handle_out, name_maybe, max_sessions_maybe, unk_bool)
-    def srv_cmd3(self, name_maybe):
-        # srv::UnregisterService
-        obj = self.r64(D.srv_objptr)
-        return self.cv(obj, 0x38, name_maybe)
 
     def srv_new(self):
         old = self.r32(self.r64(D.srv_objptr)+12)
